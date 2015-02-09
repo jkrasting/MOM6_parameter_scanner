@@ -43,6 +43,8 @@ def parseCommandLine():
       help='''parameter-files/tar-files to scan.''')
   parser.add_argument('-nml','--namelist', action='store_true',
       help='scan for Fortran namelists.')
+  parser.add_argument('-log','--log', action='store_true',
+      help='scan for model output in FMS log file.')
   parser.add_argument('-if','--ignore_files', action='append', default=[],
       help='file patterns to ignore when searching.')
   parser.add_argument('-x','--exclude', action='append', default=[],
@@ -67,6 +69,7 @@ def main(args):
   P = collections.OrderedDict()
   for file in args.files:
     if args.namelist: P[file] = Namelists(file, exclude=args.exclude, ignore_files=args.ignore_files)
+    elif args.log: P[file] = Log(file, exclude=args.exclude, ignore_files=args.ignore_files)
     else: P[file] = Parameters(file, exclude=args.exclude)
 
   if len(P)==1:
@@ -218,7 +221,7 @@ class Parameters(object):
 
 class Namelists(object):
   """Scans a logfile or input namelist file for Fortran namelists"""
-  def __init__(self, file, parameter_files=['*logfile.*', 'input.nml', '*.nml'], exclude=[], ignore_files=[]):
+  def __init__(self, file, parameter_files=['*logfile.*', 'input.nml', '*.nml'], exclude=[], ignore_files=[], uppercase_only=False):
     self.dict = collections.OrderedDict()
     open_file, filename, ctime = openParameterFile(file, parameter_files=parameter_files, ignore_files=ignore_files)
     self.label = filename
@@ -238,8 +241,13 @@ class Namelists(object):
       if t.startswith('"'): t = "'"+t[1:]
       if t.endswith('"'): t = t[:-1]+"'"
       if len(t)>1 and t.startswith('&'):
-        block.append(t[1:].lower())
-        in_namelist_block = True
+        if uppercase_only: # Only examine uppercase namelist blocks
+          if t[1:].upper() == t[1:]:
+            block.append(t[1:].upper())
+            in_namelist_block = True
+        else:
+          block.append(t[1:].lower())
+          in_namelist_block = True
       elif not in_namelist_block:
         continue
       elif t == '/':
@@ -288,6 +296,10 @@ class Namelists(object):
     for k,v in self.dict.iteritems():
       print '<tr> <td>'+k+'</td> <td>'+v+'</td> </tr>'
     print '</table>'
+
+class Log(Namelists):
+  def __init__(self, file, parameter_files=['*logfile.*'], exclude=[], ignore_files=[]):
+    super(Log, self).__init__(file, parameter_files=parameter_files, exclude=exclude, ignore_files=ignore_files, uppercase_only=True)
 
 def splitPath(path):
   """Split a path into a multiple lines"""
