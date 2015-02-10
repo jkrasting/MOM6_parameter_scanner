@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse
+#import argparse
 import collections
 import fnmatch
 import glob
@@ -208,6 +208,8 @@ class Parameters(object):
     return diff
   def __repr__(self):
     return str(self.dict)
+  def keys(self):
+    return self.dict.keys()
   def get(self,key):
     return self.dict.get(key,'--')
   def json(self):
@@ -286,6 +288,8 @@ class Namelists(object):
     return diff
   def __repr__(self):
     return str(self.dict)
+  def keys(self):
+    return self.dict.keys()
   def get(self,key):
     return self.dict.get(key,'--')
   def json(self):
