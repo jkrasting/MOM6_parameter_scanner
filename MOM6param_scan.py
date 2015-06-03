@@ -51,6 +51,8 @@ def parseCommandLine():
       help='parameters to exclude.')
   parser.add_argument('-fmt','--format', choices=['json', 'html'], default='json',
       help='output format.')
+  parser.add_argument('-t','--transpose', action='store_true',
+      help='transpose html table.')
   parser.add_argument('-d','--debug', action='store_true',
       help='turn on debugging information.')
   args = parser.parse_args()
@@ -105,11 +107,18 @@ def main(args):
       print html_header
       print '<table>'
       print '<tr>\n<th>Parameter</th>'
-      for e in table.iterkeys(): print '<th><div>'+splitPath(e)+'</div></th>'
-      for p in allkeys:#table[table.keys()[0]]:
-        print '<tr>\n<td>'+p+'</td>'
-        for e in table.iterkeys(): print '<td>'+table[e][p]+'</td>'
-        print '</tr>'
+      if args.transpose:
+        for p in allkeys: print '<th><div>'+p+'</div></th>'
+        for e in table.iterkeys():
+          print '<tr>\n<td>'+e+'</td>'
+          for p in allkeys: print '<td>'+table[e][p]+'</td>'
+          print '</tr>'
+      else:
+        for e in table.iterkeys(): print '<th><div>'+splitPath(e)+'</div></th>'
+        for p in allkeys:
+          print '<tr>\n<td>'+p+'</td>'
+          for e in table.iterkeys(): print '<td>'+table[e][p]+'</td>'
+          print '</tr>'
       print '</table>'
       print '</html>'
 
