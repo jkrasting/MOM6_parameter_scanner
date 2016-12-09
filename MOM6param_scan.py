@@ -142,6 +142,7 @@ def openParameterFile(file,parameter_files=['*MOM_parameter_doc.all', '*MOM_para
           for ti in to_ignore: possible_matches.remove(ti)
         matches += possible_matches
         #matches += glob.glob(root+'/'+pat)
+      matches = sorted(matches)
       if len(matches): return openParameterFile(matches[0], parameter_files=parameter_files, ignore_files=ignore_files)
     raise Exception('No matches found within sub-directories of '+file)
   if not os.path.isfile(file): raise Exception('Not sure of file type for '+file)
