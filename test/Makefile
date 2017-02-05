@@ -3,6 +3,7 @@ M6S = ../MOM6param_scan.py
 
 TESTS = test1.json test2.json test3.json
 MD5SUMS = $(TESTS:.json=.md5sum)
+REMOVE_TRAILING_SPACE = sed 's/ $$//'
 
 all: test check
 
@@ -12,15 +13,15 @@ ball.tar: MOM_parameter_doc.all
 
 # Test JSON dump of a parameter file
 test1.json: MOM_parameter_doc.all
-	$(M6S) $< > $@
+	$(M6S) $< | $(REMOVE_TRAILING_SPACE) > $@
 
 # Test JSON dump of a parameter file from inside a tar file
 test2.json: ball.tar
-	$(M6S) $< > $@
+	$(M6S) $< | $(REMOVE_TRAILING_SPACE) > $@
 
 # Test difference of two files with different values
 test3.json: MOM_parameter_doc.all test3.mom6
-	$(M6S) -m $^ > $@
+	$(M6S) -m $^ | $(REMOVE_TRAILING_SPACE) > $@
 
 # Checksum of JSON output
 %.md5sum: %.json
