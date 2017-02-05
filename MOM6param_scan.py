@@ -70,7 +70,7 @@ def main(args):
   Does the actual work
   """
 
-  if debug: print 'main: args=',args
+  if debug: print('main: args=',args)
 
   P = collections.OrderedDict()
   for file in args.files:
@@ -84,19 +84,19 @@ def main(args):
 
   if len(P)==1:
     if args.format == 'json':
-      print P[file].json()
+      print(P[file].json())
     elif args.format == 'html':
-      print html_header
-      print '<heading>'+file+'</heading>'
+      print(html_header)
+      print('<heading>'+file+'</heading>')
       P[file].html_table()
-      print '</html>'
+      print('</html>')
   elif len(P)>1:
     # Find all the keys
     allkeys = []
     for i,p in enumerate(P.itervalues()):
       if i==0: p0 = p
       else:
-        if debug: print 'Comparing',p0.label,'<-->',p.label
+        if debug: print('Comparing',p0.label,'<-->',p.label)
         diff = p0.compare(p)
         allkeys += diff.keys()
         p0 = p
@@ -110,25 +110,25 @@ def main(args):
       for k in allkeys: row[k] = p.get(k)
       table[e] = row
     if args.format == 'json':
-      print json.dumps(table, indent=2)
+      print(json.dumps(table, indent=2))
     elif args.format == 'html':
-      print html_header
-      print '<table>'
-      print '<tr>\n<th>Parameter</th>'
+      print(html_header)
+      print('<table>')
+      print('<tr>\n<th>Parameter</th>')
       if args.transpose:
-        for p in allkeys: print '<th><div>'+p+'</div></th>'
+        for p in allkeys: print('<th><div>'+p+'</div></th>')
         for e in table.iterkeys():
-          print '<tr>\n<td>'+e+'</td>'
-          for p in allkeys: print '<td>'+table[e][p]+'</td>'
-          print '</tr>'
+          print('<tr>\n<td>'+e+'</td>')
+          for p in allkeys: print('<td>'+table[e][p]+'</td>')
+          print('</tr>')
       else:
-        for e in table.iterkeys(): print '<th><div>'+splitPath(e)+'</div></th>'
+        for e in table.iterkeys(): print('<th><div>'+splitPath(e)+'</div></th>')
         for p in allkeys:
-          print '<tr>\n<td>'+p+'</td>'
-          for e in table.iterkeys(): print '<td>'+table[e][p]+'</td>'
-          print '</tr>'
-      print '</table>'
-      print '</html>'
+          print('<tr>\n<td>'+p+'</td>')
+          for e in table.iterkeys(): print('<td>'+table[e][p]+'</td>')
+          print('</tr>')
+      print('</table>')
+      print('</html>')
 
 
 def openParameterFile(file,parameter_files=['*MOM_parameter_doc.all', '*MOM_parameter_doc.short'],ignore_files=[]):
@@ -161,13 +161,13 @@ def openParameterFile(file,parameter_files=['*MOM_parameter_doc.all', '*MOM_para
         to_ignore = [n for n in member if fnmatch.fnmatch(n, fm)]
         for ti in to_ignore: member.remove(ti)
       if len(member):
-        if debug: print 'openParameterFile: Found',member[0],'in',tf.getmember(member[0])
+        if debug: print('openParameterFile: Found',member[0],'in',tf.getmember(member[0]))
         return tf.extractfile(member[0]), file + '(' + member[0] + ')', os.path.getctime(file)
   else: #if ext == '.all' or ext == '.short':
     matches = False
     for pat in parameter_files: matches = matches or fnmatch.fnmatch(file, pat)
     if matches:
-      if debug: print 'openParameterFile: opening',file
+      if debug: print('openParameterFile: opening',file)
       return open(file, 'r'), file, os.path.getctime(file)
   raise Exception('Unable to find a parameter file in '+file)
 
@@ -233,11 +233,11 @@ class Parameters(object):
   def json(self):
     return json.dumps(self.dict, indent=2)
   def html_table(self):
-    print '<table>'
-    print '<tr>\n<th>Parameter</th> <th>Value</th>'
+    print('<table>')
+    print('<tr>\n<th>Parameter</th> <th>Value</th>')
     for k,v in self.dict.iteritems():
-      print '<tr> <td>'+k+'</td> <td>'+v+'</td> </tr>'
-    print '</table>'
+      print('<tr> <td>'+k+'</td> <td>'+v+'</td> </tr>')
+    print('</table>')
 
 class Namelists(object):
   """Scans a logfile or input namelist file for Fortran namelists"""
@@ -313,11 +313,11 @@ class Namelists(object):
   def json(self):
     return json.dumps(self.dict, indent=2)
   def html_table(self):
-    print '<table>'
-    print '<tr>\n<th>Parameter</th> <th>Value</th>'
+    print('<table>')
+    print('<tr>\n<th>Parameter</th> <th>Value</th>')
     for k,v in self.dict.iteritems():
-      print '<tr> <td>'+k+'</td> <td>'+v+'</td> </tr>'
-    print '</table>'
+      print('<tr> <td>'+k+'</td> <td>'+v+'</td> </tr>')
+    print('</table>')
 
 class Log(Namelists):
   def __init__(self, file, parameter_files=['*logfile.*'], exclude=[], ignore_files=[]):
