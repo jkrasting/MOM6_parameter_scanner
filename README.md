@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/adcroft/MOM6_parameter_scanner.svg?branch=master)](https://travis-ci.org/adcroft/MOM6_parameter_scanner)
+
+
 # MOM6 parameter scanner
 
 ## Usage

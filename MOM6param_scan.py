@@ -49,6 +49,8 @@ def parseCommandLine():
       help='scan for model output in FMS log file.')
   parser.add_argument('-if','--ignore_files', action='append', default=[],
       help='file patterns to ignore when searching.')
+  parser.add_argument('-m','--assume_mom6', action='store_true',
+      help='assume FILE is a MOM6 parameter file. By default only MOM_parameter_doc.{all,short} are scanned.')
   parser.add_argument('-x','--exclude', action='append', default=[],
       help='parameters to exclude.')
   parser.add_argument('-fmt','--format', choices=['json', 'html'], default='json',
@@ -77,6 +79,7 @@ def main(args):
       if len(args.ignore_files)>0: P[file] = Namelists(file, exclude=args.exclude, ignore_files=args.ignore_files)
       else: P[file] = Namelists(file, exclude=args.exclude, ignore_files=['*.000000.out'])
     elif args.log: P[file] = Log(file, exclude=args.exclude, ignore_files=args.ignore_files)
+    elif args.assume_mom6: P[file] = Parameters(file, parameter_files=['*'+file], exclude=args.exclude)
     else: P[file] = Parameters(file, exclude=args.exclude)
 
   if len(P)==1:

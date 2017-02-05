@@ -1,0 +1,28 @@
+! This is the experiment description block.
+
+! === module MOM ===
+BOOL1 = True                    !   [Boolean] default = False
+                                ! If true, do stuff.
+FLOAT1 = 1.0                    !   [s]
+                                ! This has no default so is mandatory.
+FLOAT2 = 2.0                    !   [s] default = 3.0
+                                ! This has a default so is optional. This file has different documentation.
+
+! === module MOM_and_dad ===
+BOOL2 = True                    !   [Boolean] default = False
+                                ! A parameter in module_MOM_and_dad.
+STRING1 = "abc"                 ! default = "none"
+                                ! Strings normally have quotes.
+STRING1 = abc                   ! default = "none"
+                                ! But if quotes are missing, we let you off the hook.
+
+! === module MOM_child ===
+! This module tries to cause trouble.
+CHILD%
+INT1 = 2                        ! default = 3
+                                ! This resolves to CHILD%INT1 and should not conflict with INT1 from above.
+%CHILD
+CHILD%FLOAT2 = 2.0              !   [s] default = 3.0
+                                ! This is a one-liner that refers to a parameter inside a block.
+UNCLE%CHILD%FLOAT2 = 2.0        !   [s] default = 3.0
+                                ! Blocks can be nested.

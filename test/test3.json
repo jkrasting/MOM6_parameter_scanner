@@ -1,0 +1,10 @@
+{
+  "MOM_parameter_doc.all": {
+    "GLOBAL": "False", 
+    "INT1": "1"
+  }, 
+  "test3.mom6": {
+    "GLOBAL": "--", 
+    "INT1": "--"
+  }
+}
