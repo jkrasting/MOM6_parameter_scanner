@@ -1,0 +1,12 @@
+{
+  "GLOBAL": "False", 
+  "BOOL1": "True", 
+  "FLOAT1": "1.0", 
+  "FLOAT2": "2.0", 
+  "BOOL2": "True", 
+  "INT1": "1", 
+  "STRING1": "abc", 
+  "CHILD%INT1": "2", 
+  "CHILD%FLOAT2": "2.0", 
+  "UNCLE%CHILD%FLOAT2": "2.0"
+}
