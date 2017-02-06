@@ -7,7 +7,7 @@ REMOVE_TRAILING_SPACE = sed 's/ $$//'
 
 all: test check
 
-# Put the pamameter file inside a tar file
+# Put the parameter file inside a tar file
 ball.tar: MOM_parameter_doc.all
 	tar zcf $@ $^
 
@@ -28,7 +28,8 @@ test3.json: MOM_parameter_doc.all test3.mom6
 	md5sum $< > $@
 
 # Invoke each test that results in a JSON file
-test: $(TESTS)
+test:
+	make --always-make $(TESTS)
 
 # Check the status of the *.md5sum files
 check: $(TESTS)

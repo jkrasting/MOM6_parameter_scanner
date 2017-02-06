@@ -6,4 +6,4 @@ python:
  - "2.7"
 
 script:
- - cd test && make --always-make test && make check
+ - cd test && make test && make check
