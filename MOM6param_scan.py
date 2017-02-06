@@ -93,7 +93,9 @@ def main(args):
   elif len(P)>1:
     # Find all the keys
     allkeys = []
-    for i,p in enumerate(P.itervalues()):
+    try: values = P.itervalues() # Python2
+    except AttributeError: values = P.values() # Python3
+    for i,p in enumerate(values):
       if i==0: p0 = p
       else:
         if debug: print('Comparing',p0.label,'<-->',p.label)
@@ -105,7 +107,9 @@ def main(args):
 
     # Construct a table as a dictionary of dictionaries
     table = collections.OrderedDict()
-    for e,p in P.iteritems():
+    try: items = P.iteritems() # Python2
+    except AttributeError: items = P.items() # Python3
+    for e,p in items:
       row = collections.OrderedDict()
       for k in allkeys: row[k] = p.get(k)
       table[e] = row
@@ -215,13 +219,17 @@ class Parameters(object):
     od1 = collections.OrderedDict(self.dict)
     od2 = collections.OrderedDict(other.dict)
     diff = {}
-    for k,v1 in od1.iteritems():
+    try: items = od1.iteritems() # Python2
+    except AttributeError: items = od1.items() # Python3
+    for k,v1 in items:
       v2 = od2.get(k,None)
       if v2 is None: diff[k] = (v1, None)
       else:
         if v1 != v2: diff[k] = (v1, v2)
         del od2[k]
-    for k,v2 in od2.iteritems():
+    try: items = od2.iteritems() # Python2
+    except AttributeError: items = od2.items() # Python3
+    for k,v2 in items:
       diff[k] = (None, v2)
     return diff
   def __repr__(self):
