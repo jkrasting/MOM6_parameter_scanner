@@ -1,2 +1,4 @@
 *.swp
 *.tar
+*.pyc
+MOM6param_scan_interactive.py

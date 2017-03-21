@@ -82,7 +82,8 @@ def main(args):
     elif args.assume_mom6: P[file] = Parameters(file, parameter_files=['*'+file], exclude=args.exclude)
     else: P[file] = Parameters(file, exclude=args.exclude)
 
-  if len(P)==1:
+  if args.format == 'object': return P
+  elif len(P)==1:
     if args.format == 'json':
       print P[file].json()
     elif args.format == 'html':
@@ -129,7 +130,7 @@ def main(args):
           print '</tr>'
       print '</table>'
       print '</html>'
-
+  return P
 
 def openParameterFile(file,parameter_files=['*MOM_parameter_doc.all', '*MOM_parameter_doc.short'],ignore_files=[]):
   """Returns python file object for a MOM_parameter_doc file, that might be inside a tar-file."""
@@ -173,7 +174,7 @@ def openParameterFile(file,parameter_files=['*MOM_parameter_doc.all', '*MOM_para
 
 class Parameters(object):
   """MOM6 parameter parser"""
-  def __init__(self, file, parameter_files=['*MOM_parameter_doc.all', '*MOM_parameter_doc.short'], exclude=[], ignore_files=[]):
+  def __init__(self, file, parameter_files=['*MOM_parameter_doc.all', '*MOM_parameter_doc.short'], exclude=[], ignore_files=[], model_name=None):
     self.dict = collections.OrderedDict()
     open_file, filename, ctime = openParameterFile(file, parameter_files=parameter_files, ignore_files=ignore_files)
     self.label = filename
@@ -200,6 +201,7 @@ class Parameters(object):
       elif lhs:
         if len(block): key = ''.join(block)+t
         else: key = t
+        if model_name is not None: key = model_name+'%'+key
       elif t == ',':
         append = True
       elif append:
