@@ -179,7 +179,9 @@ class Parameters(object):
     open_file, filename, ctime = openParameterFile(file, parameter_files=parameter_files, ignore_files=ignore_files)
     self.label = filename
     self.ctime = ctime
-    open_file = open_file.read().decode('utf8')
+    open_file = open_file.read()
+    if not isinstance(open_file, str):
+      open_file = open_file.decode('utf8')
     lex = shlex.shlex(open_file)
     lex.commenters = '!'
     lex.wordchars += '.+-%'
@@ -251,7 +253,9 @@ class Namelists(object):
     self.label = filename
     self.ctime = ctime
     excludes = r'|'.join([fnmatch.translate(x) for x in exclude]) or r'$.'
-    open_file = open_file.read().decode('utf8')
+    open_file = open_file.read()
+    if not isinstance(open_file, str):
+      open_file = open_file.decode('utf8')
     lex = shlex.shlex(open_file)
     lex.commenters = '!'
     lex.wordchars += '.+-&'
